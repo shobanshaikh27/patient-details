@@ -1,0 +1,62 @@
+/* Apply styling to the entire footer */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    /* White background */
+    color: #000000;
+    /* Black text */
+    font-family: Arial, sans-serif;
+}
+
+/* Style the footer sections */
+.footer-section {
+    padding: 20px;
+    text-align: center;
+    background-color: #050509;
+    color: #ededed;
+}
+
+/* Style the footer brand */
+.footer-brand .footer-heading {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Style the social media section */
+.footer-section2 {
+    background-color: #050509;
+    /* Light gray background for social media section */
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-section2 h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #ededed;
+}
+
+.footer-section3 {
+    margin-top: 10px;
+    color: #ededed;
+}
+
+.footer-section3 span {
+    margin: 0 10px;
+}
+
+/* Style the copyright and links section */
+.footer-section2 p,
+.footer-section2 a {
+    color: #ededed;
+    /* Black text */
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.footer-section2 a:hover {
+    text-decoration: underline;
+}

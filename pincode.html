@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="formStyle.css">
+    <title>Fetching Data - API</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="section1">
+        <div class="form-container">
+            <h2>PIN SIMULATOR</h2>
+            <form action="#" onsubmit="matchPin(event)">
+                <input type="text" name="pin" id="pin" placeholder="Enter the PIN" />
+                <input type="submit" value="GO">
+                <p id="msg"></p>
+            </form>
+        </div>
+    </div>
+    <img src="../imgs/loading.gif" alt="loading..." style="width: 100px;" id="loader">
+    <div class="container text-center my-4">
+        <h3 id="resultMsg" class="text-center"></h3>
+        <div id="pinTableContainer">
+            <table class="table table-striped table-hover" id="pinTable">
+                <tr>
+                    <th>Name</th>
+                    <th>Branch Type</th>
+                    <th>Circle</th>
+                    <th>District</th>
+                    <th>Division</th>
+                    <th>Region</th>
+                    <th>Block</th>
+                    <th>State</th>
+                    <th>Country</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var tl = gsap.timeline()
+        tl.from(".form-container", {
+            opacity: 0,
+            y: 100,
+            duration: 1,
+            delay: 0.5
+        });
+        const matchPin = async (event) => {
+            event.preventDefault();
+            let pinTable = document.getElementById("pinTable");
+            let pin = document.getElementById('pin');
+            let msg = document.getElementById('msg');
+            let loader = document.getElementById('loader');
+            let resultMsg = document.getElementById('resultMsg');
+            let pinTableContainer = document.getElementById("pinTableContainer");
+            pinTableContainer.style.display="none";
+            pinTable.innerHTML="";
+            msg.innerHTML = "";
+            resultMsg.innerHTML = "";
+            if (pin.value.length == 0) {
+                msg.innerHTML = "PIN can't be Empty";
+                msg.style.color = "red";
+            }
+            else {
+                loader.style.display = "block";
+                const url = `https://api.postalpincode.in/pincode/${pin.value}`;
+                let data = await fetch(url);
+                let parsedData = await data.json();
+                loader.style.display = "none";
+                let tableHTML = "";
+                if (parsedData[0]["Status"] !== "Success") {
+                    resultMsg.innerHTML = "No Records Found!";
+                }
+                else {
+                    resultMsg.innerHTML = "Results";
+                    pinTableContainer.style.display = "block";
+                    for (let i in parsedData[0]["PostOffice"]) {
+                        tableHTML += `<tr>
+                                 <td>${parsedData[0]["PostOffice"][i]["Name"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["BranchType"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["Circle"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["District"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["Division"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["Region"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["Block"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["State"]}</td>
+                                 <td>${parsedData[0]["PostOffice"][i]["Country"]}</td>
+                              </tr>`;
+                    }
+                    pinTable.innerHTML += tableHTML;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
